@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="digipro.beteam.formatoselectronicos.UrlPortalActivity">
+
+    <LinearLayout
+        android:layout_width="577dp"
+        android:layout_height="810dp"
+        android:orientation="vertical"
+        tools:layout_editor_absoluteY="8dp"
+        tools:layout_editor_absoluteX="8dp">
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="URL"
+            tools:text="URL" />
+
+        <EditText
+            android:id="@+id/textUrl"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="textPersonName" />
+
+        <Button
+            android:id="@+id/buttonGuardar"
+            android:layout_width="435dp"
+            android:layout_height="wrap_content"
+            android:text="Guardar" />
+    </LinearLayout>
+
+</android.support.constraint.ConstraintLayout>
