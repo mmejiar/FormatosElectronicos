@@ -1,7 +1,10 @@
 package digipro.beteam.utils;
 
+import android.content.Context;
 import android.os.Environment;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 
@@ -12,26 +15,25 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.FileReader;
 
+import digipro.beteam.formatoselectronicos.MainActivity;
 import digipro.beteam.model.ConfigFile;
 
 public class Utils {
 
     public static void validateConfig(ConfigFile config){
         ConfigFile cfg;
-        if(config.getUrl() == null) {
-            writeToStorage(config);
-        }
-        else{
-            String var = readFromSD();
+        String var;
+        var = readFromSD();
+        if(var.trim().length() > 0){
             cfg = deserializeJson(var);
-            if(cfg.getUrl() == null){
-                writeToStorage(config);
-            }
+            cfg.setUrl(config.getUrl().toString());
+            writeToStorage(cfg);
+        } else{
+            writeToStorage(config);
         }
     }
 
     public static void writeToStorage(ConfigFile config) {
-
             Gson gson = new Gson();
             String json = gson.toJson(config);
 
@@ -56,24 +58,29 @@ public class Utils {
             } catch (IOException e) {
                 Log.e("ERROR:---", "Could not write file to SDCard" + e.getMessage());
             }
-
     }
 
     public static String readFromSD(){
         File sdcard = Environment.getExternalStorageDirectory();
         File file = new File(sdcard,"cfgfile.txt");
         StringBuilder text = new StringBuilder();
-        try {
-            BufferedReader br = new BufferedReader(new FileReader(file));
-            String line;
-            while ((line = br.readLine()) != null) {
-                text.append(line);
-                text.append('\n');
+        String texto;
+        if(file.exists()){
+            try {
+                BufferedReader br = new BufferedReader(new FileReader(file));
+                String line;
+                while ((line = br.readLine()) != null) {
+                    text.append(line);
+                    text.append('\n');
+                }
             }
+            catch (IOException e) {
+            }
+             texto = text.toString();
+        } else{
+            texto = "";
         }
-        catch (IOException e) {
-        }
-        return text.toString();
+        return texto;
     }
 
     public static ConfigFile deserializeJson(String jsonString){
@@ -81,5 +88,9 @@ public class Utils {
         ConfigFile config;
         config = gson.fromJson(jsonString, ConfigFile.class);
         return config;
+    }
+
+    public static void SendMessage(Context context, String message) {
+        Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
     }
 }

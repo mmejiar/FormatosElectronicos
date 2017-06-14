@@ -1,10 +1,12 @@
 package digipro.beteam.formatoselectronicos;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
+import android.widget.ImageButton;
 import android.widget.TextView;
-
 import com.google.gson.Gson;
 import com.google.gson.internal.LinkedTreeMap;
 
@@ -28,6 +30,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+        goToConfig();
 
         try {
             $.with(this);
@@ -47,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
                                 ConfigFile config;
                                 String var = Utils.readFromSD();
                                 config = Utils.deserializeJson(var);
-                                if(config.getUrl() != null){
+                                if(config.getUrl().toString().trim().length() > 0){
                                     config.setWsusuario(services.get("wsusuario").toString());
                                     config.setWsimagenes( services.get("wsimagenes").toString());
                                     config.setWcffiletransfer(services.get("wcffiletransfer").toString());
@@ -55,6 +58,7 @@ public class MainActivity extends AppCompatActivity {
                                 }
                             } catch (Exception ex) {
                                 String error = ex.getMessage();
+                                Utils.SendMessage(MainActivity.this, error);
                             }
                         }
                     }).error(new Function() {
@@ -65,8 +69,21 @@ public class MainActivity extends AppCompatActivity {
                             Log.e("Ajax", statusCode + " " + error);
                         }
                     }));
+
         } catch (Exception ex) {
             String error = ex.getMessage();
+            Utils.SendMessage(MainActivity.this, error);
         }
+    }
+
+    private void goToConfig(){
+        final ImageButton btnConfig = (ImageButton) findViewById(R.id.btnConfig);
+        btnConfig.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), UrlPortalActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 }

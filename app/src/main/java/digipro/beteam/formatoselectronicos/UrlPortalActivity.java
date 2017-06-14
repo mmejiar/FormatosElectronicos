@@ -11,25 +11,28 @@ import digipro.beteam.model.ConfigFile;
 import digipro.beteam.utils.Utils;
 
 public class UrlPortalActivity extends AppCompatActivity {
-
+    final ConfigFile config = new ConfigFile();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_url_portal);
-
-        final ConfigFile config = new ConfigFile();
         Utils.writeToStorage(config);
+        Url();
+    }
 
-        final Button boton1 = (Button) findViewById(R.id.buttonGuardar);
-        final TextView txtUrl = (TextView) findViewById(R.id.textUrl);
+    private void Url(){
+        final Button boton1 = (Button) findViewById(R.id.btnGuardar);
+        final TextView txtUrl = (TextView) findViewById(R.id.txtUrl);
         boton1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(txtUrl.getText().toString() != null){
+                if(txtUrl.getText().toString().trim().length() > 0){
                     config.setUrl(txtUrl.getText().toString());
                     Utils.validateConfig(config);
                     Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                     startActivity(intent);
+                } else{
+                    Utils.SendMessage(UrlPortalActivity.this, "Ingrese una URL valida");
                 }
             }
         });
